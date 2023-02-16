@@ -4,7 +4,7 @@
 
 <template>
     <div class="h-100">
-        <JsonEditorVue v-model="value" class="h-100" ></JsonEditorVue>
+        <JsonEditorVue v-model="value" class="h-100" mode="text"></JsonEditorVue>
         <button @click="updateAnnoataion" type="button" class="btn btn-success w-100">Save</button>
     </div>
 </template>
