@@ -5,6 +5,7 @@
 <template>
     <div class="h-100">
         <JsonEditorVue v-model="value" class="h-100" ></JsonEditorVue>
+        <button @click="updateAnnoataion" type="button" class="btn btn-success w-100">Save</button>
     </div>
 </template>
 
@@ -24,6 +25,14 @@ export default {
             let self = this
             axios.get('/api/annotations/' + id + '/').then(function(response){
                 self.value = response.data
+            })
+        }
+    },
+    methods:{
+        updateAnnoataion(){
+            let self = this
+            axios.put('/api/annotations/' + self.timelineId + '/', self.value).then(function(response){
+                console.log('annotation updated!')
             })
         }
     }
