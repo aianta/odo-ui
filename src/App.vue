@@ -21,6 +21,7 @@ import JsonEditorVue from 'json-editor-vue';
               @click="selectTimeline(timeline.id)"
               @onElement="selectElement"
               class="mt-2"
+              ref="timelines"
             ></Timeline>
           </li>
         </ol>
@@ -34,7 +35,7 @@ import JsonEditorVue from 'json-editor-vue';
       </div>
       <div class="col d-flex  flex-column">
         <h1>Timeline Annotation</h1>
-        <AnnotationPane class="flex-fill" :timelineId="selected"></AnnotationPane>
+        <AnnotationPane class="flex-fill" :timelineId="selected" @onUpdate="updateTimelines"></AnnotationPane>
       </div>
 
     </div>
@@ -65,6 +66,11 @@ export default {
     })
   },
   methods:{
+    updateTimelines(){
+      this.$refs.timelines.forEach(
+          timeline=>timeline.getName()
+      )
+    }, 
     selectTimeline(id) {
       this.selected = id
       let t = this.timelines.find(timeline=>timeline.id === this.selected).data

@@ -32,7 +32,7 @@ export default {
         updateAnnoataion(){
             let self = this
             axios.put('/api/annotations/' + self.timelineId + '/', self.value).then(function(response){
-                console.log('annotation updated!')
+                self.$emit('onUpdate')
             })
         }
     }

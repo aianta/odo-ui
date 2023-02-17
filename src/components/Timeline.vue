@@ -1,6 +1,6 @@
 <template>
     <div class="w-auto">
-        <span>{{ timeline.id }}</span>
+        <span>{{ name !== undefined?name:timeline.id }}</span>
         <div :class="getClass()">
         <div class="d-flex justify-content-start timeline-container">
 
@@ -18,16 +18,29 @@
 </template>
 
 <script>
-
+import axios from 'axios'
 export default {
     name: 'Timeline',
     props: ['timeline', 'index', 'selected', 'selectedElement'],
     data(){
         return {
-
+            name: undefined
         }
     },
+    mounted(){
+        this.getName()
+    },
     methods:{
+        getName(){
+            let self = this
+            axios.get('/api/annotations/' + self.timeline.id + '/').then(function(response){
+                console.log('annotation')
+                console.log(response.data)
+                if(response.data.hasOwnProperty('name')){
+                    self.name = response.data.name
+                }
+            })
+        },
         getClass(){
             if (this.selected === this.timeline.id){
                 return 'selected'
