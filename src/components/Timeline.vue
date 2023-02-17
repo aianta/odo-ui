@@ -1,12 +1,18 @@
 <template>
-    <div>
+    <div class="w-auto">
         <span>{{ timeline.id }}</span>
-        <div class="d-flex justify-content-evenly timeline-container">
-            <div class="timeline-item flex-fill" 
-            v-for="entity in timeline.data">
-                {{ entity.symbol }}
-            </div>
+        <div :class="getClass()">
+        <div class="d-flex justify-content-start timeline-container">
+
+                <div :class="'timeline-item text-center ' + getElementClass(entity.index)" 
+                    v-for="entity in timeline.data"
+                    @click="selectElement(entity.index)"
+                    >
+                        {{ entity.symbol }} <small>{{ entity.size > 1 ?'('+entity.size+')':'' }}</small>
+                </div>
+           
         </div>
+    </div>
     </div>
 
 </template>
@@ -15,24 +21,67 @@
 
 export default {
     name: 'Timeline',
-    props: ['timeline'],
+    props: ['timeline', 'index', 'selected', 'selectedElement'],
     data(){
         return {
-            msg: "hello"
+
+        }
+    },
+    methods:{
+        getClass(){
+            if (this.selected === this.timeline.id){
+                return 'selected'
+            }
+
+            if(this.index % 2 === 0){
+                return 'accent'
+            }
+        },
+        getElementClass(myIndex){
+            if(this.selectedElement === myIndex && this.selected === this.timeline.id){
+                return 'selected-element'
+            }
+        },
+        selectElement(elementIndex){
+            this.$emit('onElement', elementIndex)
+            this.selectedElementIndex = elementIndex
         }
     }
 }
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import '@/assets/main.scss';
+@import '../../node_modules/bootstrap/scss/_variables.scss';
+
+$element-size: 75px;
+
+.selected-element{
+    background-color: $green-400;
+}
+
+.selected{
+    background-color: $green-200;
+}
+
+.accent{
+    background-color: $blue-200;
+}
 
 .timeline-container{
-    border: solid 2px #7a7a7a;
+    border: solid 2px $dark;
+    width: fit-content;
 }
 .timeline-item{
-    border-left: solid 2px #7a7a7a;
-    text-align: center;
+    border-left: solid 2px $dark;
+    max-width: $element-size;
+    min-width: $element-size;
+    min-height: $element-size;
+    max-height: $element-size;
+    align-items: center;
+    justify-content: center;
+    display: flex;
 }
 
 .timeline-item:first-child{

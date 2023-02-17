@@ -3,9 +3,9 @@
 </script>
 
 <template>
-    <div class="h-100">
-        <JsonEditorVue v-model="value" class="h-100" mode="text"></JsonEditorVue>
-        <button @click="updateAnnoataion" type="button" class="btn btn-success w-100">Save</button>
+    <div class="d-flex flex-column h-75">
+        <JsonEditorVue v-model="value" class="flex-grow-1" mode="text"></JsonEditorVue>
+        <button @click="updateAnnoataion" type="button" class="mt-2 btn btn-success flex-grow-0">Save</button>
     </div>
 </template>
 
