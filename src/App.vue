@@ -10,23 +10,30 @@ import JsonEditorVue from 'json-editor-vue';
     <div class="row overflow-scroll h-50">
       <div class="col">
         <h1>Timelines</h1>
-        <ol>
-          <li v-for="(timeline,i) in timelines">
-            <Timeline 
-              :key="timeline.id"
-              :timeline="timeline"
-              :selected="selected"
-              :selectedElement="selectedElementIndex"
-              :index="i"
-              @click="selectTimeline(timeline.id)"
-              @onElement="selectElement"
-              class="mt-2"
-              ref="timelines"
-            ></Timeline>
-          </li>
-        </ol>
+        <Sortable
+        :list="timelines"
+        item-key="id"
+        tag="div"
+        >
+        <template #item="{element, index}">
+          <!-- <p class="draggable" :key="element.id">{{ element.id }}</p> -->
+          <Timeline 
+          :key="element.id"
+          :timeline="element"
+          :selected="selected"
+          :selectedElement="selectedElementIndex"
+          :index="index"
+          @click="selectTimeline(element.id)"
+          @onElement="selectElement"
+          class="mt-2 draggable"
+          ref="timelines"
+          ></Timeline>
+        </template>
+
+        </Sortable>
 
       </div>
+
     </div>
     <div class="row">
       <div class="col d-flex  flex-column">
@@ -45,11 +52,13 @@ import JsonEditorVue from 'json-editor-vue';
 
 <script>
 import axios from 'axios'
+import {Sortable} from 'sortablejs-vue3'
 
 export default {
   name: 'App',
   data(){
     return{
+      testItems: [{id:1},{id:2}],
       timelines: [],
       selected: undefined,
       selectedElementIndex: undefined,

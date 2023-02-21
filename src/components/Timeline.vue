@@ -1,7 +1,7 @@
 <template>
-    <div class="w-auto">
-        <span>{{ name !== undefined?name:timeline.id }}</span>
-        <div :class="getClass()">
+    <div :class="'p-2 ' +  getClass()">
+        <h4>{{ name !== undefined?name:timeline.id }}</h4>
+        <div>
         <div class="d-flex justify-content-start timeline-container">
 
                 <div :class="'timeline-item text-center ' + getElementClass(entity.index)" 
@@ -79,7 +79,7 @@ $element-size: 75px;
 }
 
 .accent{
-    background-color: $blue-200;
+    background-color: $blue-100;
 }
 
 .timeline-container{

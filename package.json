@@ -15,6 +15,8 @@
     "bootstrap": "^5.2.3",
     "json-editor-vue": "^0.10.5",
     "postcss-scss": "^4.0.6",
+    "sortablejs": "^1.15.0",
+    "sortablejs-vue3": "^1.2.7",
     "vanilla-jsoneditor": "^0.14.5",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6"
