@@ -4,7 +4,8 @@
         <div>
         <div class="d-flex justify-content-start timeline-container">
 
-                <div :class="'timeline-item text-center ' + getElementClass(entity.index)" 
+                <div :class="'timeline-item text-center ' + getElementClass(entity.index)"
+                    :style="getElementStyle(entity.index)" 
                     v-for="entity in timeline.data"
                     @click="selectElement(entity.index)"
                     >
@@ -17,20 +18,77 @@
 
 </template>
 
+<script setup>
+import { useDistanceStore } from "../stores/distances"
+const store = useDistanceStore()
+
+
+</script>
+
 <script>
+import { mapStores } from "pinia";
+import { useDistanceStore } from "../stores/distances"
+
+
 import axios from 'axios'
 export default {
     name: 'Timeline',
     props: ['timeline', 'index', 'selected', 'selectedElement'],
     data(){
         return {
-            name: undefined
+            name: undefined,
+            distances: undefined,
+            minDistance: undefined,
+            maxDistance: undefined
+        }
+    },
+    computed: {
+        ...mapStores(useDistanceStore)
+    },
+    watch:{
+        selectedElement: function(index){
+            this.getSelectedDistances()
         }
     },
     mounted(){
         this.getName()
     },
     methods:{
+        getElementStyle(index){
+            //No styling changes without selected/computed element distances.
+            if(this.distances === undefined){
+                return ""
+            }
+
+            let lookupId = this.makeLookupId(index)
+            let distance = this.distances[lookupId]
+            if (distance !== undefined){
+                let normalizedDistance = this.getNormalizedDistance(distance)
+                let colorIntensity = Math.round(255 * normalizedDistance)
+                return "background-color: rgb(0,0,"+(255-colorIntensity)+") !important"
+            }else{
+                return ""
+            }
+
+        },
+        makeLookupId(index){
+            return this.timeline.id + '#' + index
+        },
+        getNormalizedDistance(distance){
+            return (distance - this.minDistance)/(this.maxDistance - this.minDistance)
+        },  
+        getSelectedDistances(){
+            let lookupId = this.selected + '#' + this.selectedElement
+            console.log('Getting distances for ', lookupId)
+            let temp = this.distancesStore.getDistancesById(lookupId)
+            if(temp !== undefined){
+                this.distances = temp
+                let values = Object.values(this.distances)
+                this.minDistance = Math.min(...values)
+                this.maxDistance = Math.max(...values)
+            }
+
+        },  
         getName(){
             let self = this
             axios.get('/api/annotations/' + self.timeline.id + '/').then(function(response){

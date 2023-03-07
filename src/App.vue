@@ -3,10 +3,20 @@ import { RouterLink, RouterView } from "vue-router";
 import Timeline from "./components/Timeline.vue";
 import AnnotationPane from "./components/AnnotationPane.vue"
 import JsonEditorVue from 'json-editor-vue';
+import { useDistanceStore } from "./stores/distances";
+
+const store = useDistanceStore()
+
+store.loadDistances()
 </script>
 
 <template>
   <div class="container-fluid h-100">
+    <div class="row">
+      <div class="col mt-2">
+        <button @click="createEmbeddings" type="button" class="btn btn-primary">Create Embeddings</button>
+      </div>
+    </div>
     <div class="row overflow-scroll h-50">
       <div class="col">
         <h1>Timelines</h1>
@@ -75,6 +85,11 @@ export default {
     })
   },
   methods:{
+    createEmbeddings(){
+      axios.post('/api/actions/createEmbeddings').then(function(response){
+        console.log('Create Embeddings dispatched.')
+      })
+    },
     updateTimelines(){
       this.$refs.timelines.forEach(
           timeline=>timeline.getName()
